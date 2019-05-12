@@ -25,7 +25,7 @@ SECRET_KEY = '44%sq+*88!kw@q19*h093!4cr$*37e##y0x#of9zy9gr!u&*vm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jogador',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -59,12 +60,13 @@ ROOT_URLCONF = 'DevMaster_Backend.urls'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    # 'localhost:8000',
-    # '127.0.0.1:8000',
-    'localhost:4200',
-    '127.0.0.1:4200',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'localhost:8000',
+#     '127.0.0.1:8000',
+#     'localhost:4200',
+#     '127.0.0.1:4200',
+#     'https://matheus-morais.github.io/gamIssues/'
+# )
 
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -100,7 +102,6 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'jogador.api.serializers.UserSerializer'
 }
-
 
 TEMPLATES = [
     {
