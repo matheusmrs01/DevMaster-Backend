@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jogador',
+    'missao',
 
     'rest_framework',
     'rest_framework.authtoken',
