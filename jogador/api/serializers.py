@@ -1,6 +1,6 @@
 from rest_framework import serializers
 import json
-from jogador.models import Jogador, Missao
+from jogador.models import Jogador
 from django.contrib.auth.models import User
 
 
@@ -102,21 +102,3 @@ class JogadorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jogador
         fields = ('id', 'user', 'private_token', 'xp_total', 'm_realizadas', 'm_adquiridas', 'mr_nadata', 'url_imagem')
-
-
-class MissaoSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Missao.objects.all())
-    jogador = serializers.PrimaryKeyRelatedField(queryset=Jogador.objects.all(), many=False)
-
-    class Meta:
-        model = Missao
-        fields = ('id', 'jogador', 'nome_missao', 'xp_missao', 'data', 'nice_tempo', 'status', 'id_issue', 'id_projeto')
-
-
-class CriarMissaoSerializer(serializers.ModelSerializer):
-    jogador = serializers.PrimaryKeyRelatedField(queryset=Jogador.objects.all(), many=False)
-
-    class Meta:
-        model = Missao
-        fields = ('jogador', 'nome_missao', 'xp_missao', 'data', 'status', 'nice_tempo', 'id_issue', 'id_projeto')
-
