@@ -11,7 +11,6 @@ class MissaoSerializer(serializers.ModelSerializer):
         model = Missao
         fields = ('id', 'jogador', 'nome_missao', 'xp_missao', 'data', 'nice_tempo', 'status', 'id_issue', 'id_projeto')
 
-
 class CriarMissaoSerializer(serializers.ModelSerializer):
     jogador = serializers.PrimaryKeyRelatedField(queryset=Jogador.objects.all(), many=False)
 

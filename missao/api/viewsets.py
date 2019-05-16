@@ -30,15 +30,16 @@ class MissaoViewSet(mixins.ListModelMixin,
 
     def retrieve(self, request, pk, *args, **kwargs):
         missão = Missao.objects.get(id=pk)
-        if request.user == missão.jogador.user or request.user.is_superadmin:
+        if request.user == missão.jogador.user:
             serializer = MissaoSerializer(missão)
             return Response(serializer.data)
         else:
             return Response({'Você não é o dono da missão!'})
 
+
     def update(self, request, pk, *args, **kwargs):
         missao = Missao.objects.get(id=pk)
-        if missao.jogador.user == request.user or request.user.is_superadmin:
+        if missao.jogador.user == request.user:
             return super(MissaoViewSet, self).update(request, *args, **kwargs)
         else:
             return Response({'Você não é dono desta missão!'})
