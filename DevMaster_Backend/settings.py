@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jogador',
     'missao',
+    'evento',
 
     'rest_framework',
     'rest_framework.authtoken',
