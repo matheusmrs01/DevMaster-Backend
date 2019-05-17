@@ -27,7 +27,7 @@ router.register(r'jogador', JogadorViewSet)
 router.register(r'criarjogador', JogadorCreateViewSet)
 router.register(r'criarmissao', CriarMissaoViewSet)
 router.register(r'missao', MissaoViewSet)
-router.register(r'item', ItemViewSet, base_name='item')
+router.register(r'item/<pk:id>', ItemViewSet, base_name='item')
 
 urlpatterns = [
     path('', include(router.urls)),
