@@ -64,7 +64,7 @@ class ItemViewSet(GenericViewSet):
 
     @method_decorator(csrf_exempt)
     @action(methods=['PUT'], detail=False, url_path='atualizarItem')
-    def atualizarItem(self, request, pk=None):
+    def atualizarItem(self, request):
         if (request.META['CONTENT_TYPE'] == 'application/json'):
             jsonData = json.loads(request.body)
 
@@ -87,6 +87,26 @@ class ItemViewSet(GenericViewSet):
                 return Response(
                     {"message": "Esse nome ja esta em uso."},
                     status=400)
+
+        else:
+            return Response(
+                {"message": "Você não tem permissão para criar um item."},
+                status=400)
+
+    @method_decorator(csrf_exempt)
+    @action(methods=['DELETE'], detail=False, url_path='deletarItem')
+    def deletarItem(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            item = jsonData
+        else:
+            item = request.POST.get('item')
+
+        if (Jogador.objects.get(user=request.user).tipo == 'A'):
+            itemFinded = Item.objects.get(pk=item['id'])
+            itemFinded.delete()
+            return Response({"message": "Item deletado com sucesso."})
 
         else:
             return Response(
