@@ -1,5 +1,5 @@
 from django.db import models
-from jogador.models import Jogador
+from jogador.models import Jogador, JogadorItem
 from evento.models import Item
 from missao.models import Missao
 
@@ -16,8 +16,8 @@ class Desafio(models.Model):
     desafiante = models.ForeignKey(Jogador, blank=True, on_delete=models.PROTECT, related_name='Desafiante')
     desafiado = models.ForeignKey(Jogador, blank=True, on_delete=models.PROTECT, related_name='Desafiado')
     status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS_CHOICES, default='P')
-    item_desafiante = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
-    item_desafiado = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiado')
+    item_desafiante = models.ForeignKey(JogadorItem, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
+    item_desafiado = models.ForeignKey(JogadorItem, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiado')
 
     def __str__(self):
         return 'Desafio: ' + self.name + ' - Entre: ' + self.desafiante.user.get_full_name() + ' VS ' + self.desafiado.user.get_full_name()
