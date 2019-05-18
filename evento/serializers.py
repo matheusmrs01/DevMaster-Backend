@@ -15,9 +15,16 @@ class ItemSerializer(serializers.ModelSerializer):
         return Item.objects.create(**validated_data)
 
 class EventoSerializer(serializers.ModelSerializer):
+    primeiro = ItemSerializer()
+    segundo = ItemSerializer()
+    terceiro = ItemSerializer()
+    quarto = ItemSerializer()
+    quinto = ItemSerializer()
+    sexto = ItemSerializer()
+
     class Meta:
         model = Evento
-        fields = ["__all__"]
+        fields = '__all__'
 
         def create(self, validated_data):
             return Evento.objects.create(**validated_data)
