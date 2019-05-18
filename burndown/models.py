@@ -10,7 +10,7 @@ class Burndown(models.Model):
     quantidade_queimada = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
-        return 'Inicio: ' + self.data_inicio + ' - Final: ' + self.data_termino
+        return 'Inicio: ' + str(self.data_inicio) + ' - Final: ' + str(self.data_termino) + ' - Ativo: ' + str(self.is_active)
 
 class MissaoBurndown(models.Model):
     burndown = models.ForeignKey(Burndown, blank=False, on_delete=models.PROTECT, related_name='Burndown')
