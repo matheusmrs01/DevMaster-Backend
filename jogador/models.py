@@ -22,6 +22,7 @@ class JogadorItem(models.Model):
     jogador = models.ForeignKey(Jogador, on_delete=models.CASCADE, related_name='JogadorItem')
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='itemJogador')
     quantidade = models.IntegerField(default=0)
+    quantidade_bloqueada = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Item: ' + self.item.name
