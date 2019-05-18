@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
+from evento.models import Item
+
 class Jogador(models.Model):
     """Essa classe se destina para o cadastro de Jogador"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Jogador', blank = True)
@@ -15,3 +17,11 @@ class Jogador(models.Model):
 
     def __str__(self):
         return 'Jogador: %s' % (self.user.get_full_name())
+
+class JogadorItem(models.Model):
+    jogador = models.ForeignKey(Jogador, on_delete=models.CASCADE, related_name='JogadorItem')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='itemJogador')
+    quantidade = models.IntegerField(default=0)
+
+    def __str__(self):
+        return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Item: ' + self.item.name
