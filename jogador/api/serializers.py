@@ -1,7 +1,9 @@
 from rest_framework import serializers
 import json
-from jogador.models import Jogador
+from jogador.models import Jogador, JogadorItem
 from django.contrib.auth.models import User
+
+from evento.serializers import ItemSerializer
 
 
 # from jogador.api.serializers import UserSerializer
@@ -102,3 +104,12 @@ class JogadorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jogador
         fields = ('id', 'user', 'private_token', 'xp_total', 'm_realizadas', 'm_adquiridas', 'mr_nadata', 'url_imagem')
+
+
+class JogadorItemSerializer(serializers.ModelSerializer):
+    jogador = JogadorSerializer()
+    item = ItemSerializer()
+
+    class Meta:
+        model = JogadorItem
+        fields = '__all__'
