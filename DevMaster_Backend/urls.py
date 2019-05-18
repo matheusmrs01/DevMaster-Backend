@@ -19,12 +19,14 @@ from django.urls import path
 from rest_framework import routers
 
 from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet
+from jogador.views import JogadorItemViewSet
 from missao.api.viewsets import CriarMissaoViewSet, MissaoViewSet
 from evento.views import ItemViewSet, EventoViewSet
 from desafio.views import DesafioViewSet
 
 router = routers.DefaultRouter()
 router.register(r'jogador', JogadorViewSet)
+router.register(r'jogadoritens', JogadorItemViewSet, base_name='jogadoritens')
 router.register(r'criarjogador', JogadorCreateViewSet)
 router.register(r'criarmissao', CriarMissaoViewSet)
 router.register(r'missao', MissaoViewSet)
