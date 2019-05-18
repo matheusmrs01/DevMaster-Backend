@@ -19,12 +19,45 @@ class BurndownViewSet(GenericViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
     @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='AtualizarBurndown')
+    def atualizarBurndown(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            burndown = jsonData
+        else:
+            burndown = request.POST.get('burndown', '')
+
+        burndownFinded = Burndown.objects.get(pk=burndown['id'])
+        missoesBurndown = MissaoBurndown.objects.filter(burndown=burndownFinded)
+
+        if missoesBurndown:
+            auxM = 0
+            auxMF = 0
+            for missaoBurndown in missoesBurndown:
+                auxM = auxM + 1
+                if missaoBurndown.missao.status:
+                    auxMF = auxMF + 1
+
+            print('Missões: ' + str(auxM))
+            print('Missoes Finalizadas: '+ str(auxMF))
+            burndownFinded.quantidade_missao = auxM
+            burndownFinded.quantidade_queimada = auxMF
+            burndownFinded.save()
+
+            return Response({"message": "Burndown Atualizado."})
+        else:
+            return Response({"message": "Esse Burndown não tem missões."})
+
+
+    @method_decorator(csrf_exempt)
     @action(methods=['GET'], detail=False, url_path='ListarBurndown')
     def listarBurndown(self, request):
         burndowns = Burndown.objects.all()
         serializer = BurndownSerializer(burndowns, many=True)
 
         return Response({'List': serializer.data})
+
 
     @method_decorator(csrf_exempt)
     @action(methods=['GET'], detail=False, url_path='ConsultarBurndown')
@@ -34,7 +67,7 @@ class BurndownViewSet(GenericViewSet):
 
             burndown = jsonData
         else:
-            burndown = request.POST.get('desafio', '')
+            burndown = request.POST.get('burndown', '')
 
         burndownFinded = Burndown.objects.get(pk=burndown['id'])
         serializer = BurndownSerializer(burndownFinded)
@@ -62,7 +95,7 @@ class MissaoBurndownViewSet(GenericViewSet):
 
             burndown = jsonData
         else:
-            burndown = request.POST.get('desafio', '')
+            burndown = request.POST.get('burndown', '')
 
         missaoburndownFinded = MissaoBurndown.objects.get(pk=burndown['id'])
         serializer = MissaoBurndownSerializer(missaoburndownFinded)
