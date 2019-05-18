@@ -17,4 +17,4 @@ class MissaoBurndown(models.Model):
     missao = models.ForeignKey(Missao, blank=False, on_delete=models.PROTECT, related_name='MissaoBurndown')
 
     def __str__(self):
-        return 'Burndown: de ' + self.burndown.data_inicio + ' - a ' + self.burndown.data_termino
+        return 'Burndown: de ' + str(self.burndown.data_inicio) + ' - a ' + str(self.burndown.data_termino) + ' - Ativo: ' + str(self.burndown.is_active)
