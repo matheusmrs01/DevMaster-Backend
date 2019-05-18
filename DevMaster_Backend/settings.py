@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'missao',
     'evento',
     'desafio',
+    'burndown',
 
     'rest_framework',
     'rest_framework.authtoken',
