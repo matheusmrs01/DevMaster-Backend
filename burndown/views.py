@@ -40,3 +40,31 @@ class BurndownViewSet(GenericViewSet):
         serializer = BurndownSerializer(burndownFinded)
 
         return Response({'Burndown': serializer.data})
+
+class MissaoBurndownViewSet(GenericViewSet):
+    queryset = MissaoBurndown.objects.all()
+    serializer_class = MissaoBurndownSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='ListarMissaoBurndown')
+    def listarMissãoBurndown(self, request):
+        missaoburndowns = MissaoBurndown.objects.all()
+        serializer = MissaoBurndownSerializer(missaoburndowns, many=True)
+
+        return Response({'List': serializer.data})
+
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='ConsultarMissaoBurndown')
+    def consultarMissaoBurndown(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            burndown = jsonData
+        else:
+            burndown = request.POST.get('desafio', '')
+
+        missaoburndownFinded = MissaoBurndown.objects.get(pk=burndown['id'])
+        serializer = MissaoBurndownSerializer(missaoburndownFinded)
+
+        return Response({'MissaoBurndown': serializer.data})
