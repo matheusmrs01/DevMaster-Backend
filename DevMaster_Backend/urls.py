@@ -21,6 +21,7 @@ from rest_framework import routers
 from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet
 from missao.api.viewsets import CriarMissaoViewSet, MissaoViewSet
 from evento.views import ItemViewSet, EventoViewSet
+from desafio.views import DesafioViewSet
 
 router = routers.DefaultRouter()
 router.register(r'jogador', JogadorViewSet)
@@ -29,6 +30,7 @@ router.register(r'criarmissao', CriarMissaoViewSet)
 router.register(r'missao', MissaoViewSet)
 router.register(r'item', ItemViewSet, base_name='item')
 router.register(r'evento', EventoViewSet, base_name='evento')
+router.register(r'desafio', DesafioViewSet, base_name='desafio')
 
 
 urlpatterns = [
