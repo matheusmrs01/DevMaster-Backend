@@ -1,14 +1,13 @@
 from rest_framework import serializers
 from desafio.models import Desafio, DesafioMissoes
-from jogador.api.serializers import JogadorSerializer
-from evento.serializers import ItemSerializer
+from jogador.api.serializers import JogadorSerializer, JogadorItemSerializer
 from missao.api.serializers import MissaoSerializer
 
 class DesafioSerializer(serializers.ModelSerializer):
     desafiante = JogadorSerializer()
     desafiado = JogadorSerializer()
-    item_desafiante = ItemSerializer()
-    item_desafiado = ItemSerializer()
+    item_desafiante = JogadorItemSerializer()
+    item_desafiado = JogadorItemSerializer()
 
     class Meta:
         model = Desafio
