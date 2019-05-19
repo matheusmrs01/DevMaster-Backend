@@ -23,7 +23,7 @@ class Desafio(models.Model):
     desafiante = models.ForeignKey(Jogador, blank=True, on_delete=models.PROTECT, related_name='Desafiante')
     desafiado = models.ForeignKey(Jogador, blank=True, null=True, on_delete=models.PROTECT, related_name='Desafiado')
     status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS_CHOICES, default='P')
-    item_desafiante = models.ForeignKey(JogadorItem, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
+    item_desafiante = models.ForeignKey(JogadorItem, blank=True, null=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
     item_desafiado = models.ForeignKey(JogadorItem, blank=True, null=True, on_delete=models.PROTECT, related_name='ItemDesafiado')
     vencedor = models.CharField(verbose_name='Vencedor', max_length=2, choices=VENCEDOR_CHOICES, blank=True, null=True)
 
