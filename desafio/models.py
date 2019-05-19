@@ -9,7 +9,13 @@ class Desafio(models.Model):
     STATUS_CHOICES = (
         ('P', 'Proposta'),
         ('A', 'Aposta'),
-        ('C', 'Conslusão'),
+        ('E', 'Em Andamento'),
+        ('C', 'Concluído'),
+    )
+
+    VENCEDOR_CHOICES = (
+        ('DE', 'Desafiante'),
+        ('DO', 'Desafiado'),
     )
 
     nome = models.CharField(max_length=200, verbose_name='Nome Desafio', blank=False)
@@ -18,6 +24,7 @@ class Desafio(models.Model):
     status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS_CHOICES, default='P')
     item_desafiante = models.ForeignKey(JogadorItem, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
     item_desafiado = models.ForeignKey(JogadorItem, blank=True, null=True, on_delete=models.PROTECT, related_name='ItemDesafiado')
+    vencedor = models.CharField(verbose_name='Status', max_length=2, choices=VENCEDOR_CHOICES, null=True)
 
     def __str__(self):
         return 'Desafio: ' + self.nome + ' - Entre: ' + self.desafiante.user.get_full_name()
@@ -25,6 +32,7 @@ class Desafio(models.Model):
 class DesafioMissoes(models.Model):
     desafio = models.ForeignKey(Desafio, blank=False, on_delete=models.PROTECT, related_name='Desafio')
     missao = models.ForeignKey(Missao, blank=False, on_delete=models.PROTECT, related_name='Missão')
+    xp_ganha = models.IntegerField(null=True)
 
     def __str__(self):
         return 'Desafio: ' + self.desafio.nome + ' - Entre: ' + self.desafio.desafiante.user.get_full_name()
