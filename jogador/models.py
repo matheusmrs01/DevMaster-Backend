@@ -9,6 +9,7 @@ class Jogador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Jogador', blank = True)
     tipo = models.CharField(verbose_name='Tipo', max_length=1, default='J', blank=True)
     xp_total = models.FloatField(default=0, blank=True)
+    desafios_v = models.IntegerField(default=0, blank=True)
     m_realizadas = models.IntegerField(default=0, blank=True)
     m_adquiridas = models.IntegerField(default=0, blank=True)
     mr_nadata = models.IntegerField(default=0, blank=True)
