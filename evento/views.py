@@ -14,6 +14,7 @@ from rest_framework.renderers import JSONRenderer
 
 from evento.serializers import EventoSerializer, ItemSerializer
 from evento.models import Evento, Item
+from jogador.models import XpEvento, JogadorItem
 
 from django.contrib.auth.models import User
 from jogador.models import Jogador
@@ -165,6 +166,7 @@ class EventoViewSet(GenericViewSet):
         serializer = EventoSerializer(eventos, many=True)
         return Response({"list": serializer.data})
 
+
     @method_decorator(csrf_exempt)
     @action(methods=['GET'], detail=False, url_path='consultarEvento')
     def consultarEvento(self, request):
@@ -176,6 +178,131 @@ class EventoViewSet(GenericViewSet):
             evento = request.POST.get('item')
 
         eventoFidend = Evento.objects.get(pk=evento['id'])
-        print(evento['id'])
         serializer = EventoSerializer(eventoFidend)
         return Response({'Evento: ': serializer.data})
+
+
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='gerarPremiacao')
+    def GerarPremiacao(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            evento = jsonData
+        else:
+            evento = request.POST.get('item')
+
+        eventoFidend = Evento.objects.get(pk=evento['id'])
+
+        eventoXP = XpEvento.objects.filter(evento=eventoFidend).order_by('-xp_evento')
+        if not eventoFidend.is_active:
+            if not eventoFidend.is_finalized:
+                aux = 1
+                if(eventoXP):
+                    for jogadorXP in eventoXP:
+                        jogadorFinded = Jogador.objects.get(id=jogadorXP.jogador.id)
+                        if aux == 1:
+                            if eventoFidend.primeiro:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.primeiro)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.primeiro)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+                        elif aux == 2:
+                            if eventoFidend.segundo:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.segundo)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
+                                                                                item=eventoFidend.segundo)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+                        elif aux == 3:
+                            if eventoFidend.terceiro:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.terceiro)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
+                                                                                item=eventoFidend.terceiro)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+                        elif aux == 4:
+                            if eventoFidend.quarto:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.quarto)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
+                                                                                item=eventoFidend.quarto)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+                        elif aux == 5:
+                            if eventoFidend.quinto:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.quinto)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
+                                                                                item=eventoFidend.quinto)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+                        elif aux == 6:
+                            if eventoFidend.sexto:
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.sexto)
+
+                                if jogadorItem:
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
+                                                                                item=eventoFidend.sexto)
+                                    jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
+                                    jogadorItemFinded.save()
+                                else:
+                                    newJogadorItem = JogadorItem()
+                                    newJogadorItem.jogador = jogadorFinded
+                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.quantidade = 1
+                                    newJogadorItem.quantidade_bloqueada = 0
+                                    newJogadorItem.save()
+
+                        aux = aux+1
+
+                eventoFidend.is_finalized = True
+                eventoFidend.save()
+                return Response({'Premiação gerada com sucesso.'})
+            else:
+                return Response({'Esse Evento acabou, e a premiação ja foi lançada.'})
+        else:
+            return Response({'Esse Evento ainda esta ativo.'})
