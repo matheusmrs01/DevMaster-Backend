@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
-from evento.models import Item
+from evento.models import Item, Evento
 
 class Jogador(models.Model):
     """Essa classe se destina para o cadastro de Jogador"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Jogador', blank = True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='User', blank = True)
     tipo = models.CharField(verbose_name='Tipo', max_length=1, default='J', blank=True)
     xp_total = models.FloatField(default=0, blank=True)
     desafios_v = models.IntegerField(default=0, blank=True)
@@ -27,3 +27,11 @@ class JogadorItem(models.Model):
 
     def __str__(self):
         return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Item: ' + self.item.name
+
+class XpEvento(models.Model):
+    evento = models.ForeignKey(Evento, on_delete=models.PROTECT, related_name='Evento')
+    jogador = models.ForeignKey(Jogador, blank=True, on_delete=models.CASCADE, related_name='JogadorEventoXP')
+    xp_evento = models.FloatField(default=0, blank=True)
+
+    def __str__(self):
+        return 'Evento: ' + self.evento.name + ' - Jogador: ' + self.jogador.user.get_full_name()

@@ -1,5 +1,4 @@
 from django.db import models
-import datetime
 
 # Create your models here.
 class Item(models.Model):
@@ -16,12 +15,12 @@ class Evento(models.Model):
     multiplicador_xp = models.FloatField(blank=True, default=1)
     data_inicio = models.DateTimeField(blank=False)
     data_final = models.DateTimeField(blank=True)
-    primeiro = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item1')
-    segundo = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item2')
-    terceiro = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item3')
-    quarto = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item4')
-    quinto =models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item5')
-    sexto = models.ForeignKey(Item, blank=True, on_delete=models.PROTECT, related_name='Item6')
+    primeiro = models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item1')
+    segundo = models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item2')
+    terceiro = models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item3')
+    quarto = models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item4')
+    quinto =models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item5')
+    sexto = models.ForeignKey(Item, blank=True, null=True, on_delete=models.PROTECT, related_name='Item6')
 
     def __str__(self):
         return 'Nome: ' + self.name
