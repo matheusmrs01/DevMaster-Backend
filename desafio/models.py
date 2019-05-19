@@ -24,7 +24,7 @@ class Desafio(models.Model):
     status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS_CHOICES, default='P')
     item_desafiante = models.ForeignKey(JogadorItem, blank=True, on_delete=models.PROTECT, related_name='ItemDesafiante')
     item_desafiado = models.ForeignKey(JogadorItem, blank=True, null=True, on_delete=models.PROTECT, related_name='ItemDesafiado')
-    vencedor = models.CharField(verbose_name='Status', max_length=2, choices=VENCEDOR_CHOICES, null=True)
+    vencedor = models.CharField(verbose_name='Vencedor', max_length=2, choices=VENCEDOR_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return 'Desafio: ' + self.nome + ' - Entre: ' + self.desafiante.user.get_full_name()
@@ -32,7 +32,7 @@ class Desafio(models.Model):
 class DesafioMissoes(models.Model):
     desafio = models.ForeignKey(Desafio, blank=False, on_delete=models.PROTECT, related_name='Desafio')
     missao = models.ForeignKey(Missao, blank=False, on_delete=models.PROTECT, related_name='Missão')
-    xp_ganha = models.IntegerField(null=True)
+    xp_ganha = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return 'Desafio: ' + self.desafio.nome + ' - Entre: ' + self.desafio.desafiante.user.get_full_name()
