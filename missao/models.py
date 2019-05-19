@@ -5,6 +5,7 @@ from jogador.models import Jogador
 class Missao(models.Model):
     jogador = models.ForeignKey(Jogador, on_delete=models.CASCADE, related_name='Jogador')
     nome_missao = models.CharField(blank=False, max_length=200)
+    xp_ganha = models.FloatField(blank=True, default=0)
     xp_missao = models.FloatField(blank=False)
     data = models.CharField(max_length=100, default='', blank=True)
     nice_tempo = models.BooleanField(default=False, blank=False)
