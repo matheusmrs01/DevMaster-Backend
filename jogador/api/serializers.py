@@ -1,7 +1,9 @@
 from rest_framework import serializers
 import json
-from jogador.models import Jogador, Missao
+from jogador.models import Jogador, JogadorItem, XpEvento
 from django.contrib.auth.models import User
+
+from evento.serializers import ItemSerializer, EventoSerializer
 
 
 # from jogador.api.serializers import UserSerializer
@@ -104,19 +106,18 @@ class JogadorSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'private_token', 'xp_total', 'm_realizadas', 'm_adquiridas', 'mr_nadata', 'url_imagem')
 
 
-class MissaoSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Missao.objects.all())
-    jogador = serializers.PrimaryKeyRelatedField(queryset=Jogador.objects.all(), many=False)
+class JogadorItemSerializer(serializers.ModelSerializer):
+    jogador = JogadorSerializer()
+    item = ItemSerializer()
 
     class Meta:
-        model = Missao
-        fields = ('id', 'jogador', 'nome_missao', 'xp_missao', 'data', 'nice_tempo', 'status', 'id_issue', 'id_projeto')
+        model = JogadorItem
+        fields = '__all__'
 
 
-class CriarMissaoSerializer(serializers.ModelSerializer):
-    jogador = serializers.PrimaryKeyRelatedField(queryset=Jogador.objects.all(), many=False)
-
+class XpEventoSerializer(serializers.ModelSerializer):
+    evento = EventoSerializer()
+    jogador = JogadorSerializer()
     class Meta:
-        model = Missao
-        fields = ('jogador', 'nome_missao', 'xp_missao', 'data', 'status', 'nice_tempo', 'id_issue', 'id_projeto')
-
+        model = XpEvento
+        fields = '__all__'
