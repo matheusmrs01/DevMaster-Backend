@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins, generics, permissions
@@ -8,9 +7,19 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.conf import settings
 
-from jogador.models import Jogador
+import json
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+
+from jogador.models import Jogador, XpEvento, JogadorItem
 from django.contrib.auth.models import User
-from .serializers import JogadorSerializer, UserSerializer, CriarJogadorSerializer
+from .serializers import JogadorSerializer, UserSerializer, CriarJogadorSerializer, XpEventoSerializer
+
+from evento.models import Evento
 
 
 class JogadorCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -56,6 +65,34 @@ class JogadorViewSet(mixins.ListModelMixin,
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class XpeventoViewSet(GenericViewSet):
+    queryset = XpEvento.objects.all()
+    serializer_class = XpEventoSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='consultarXpsEvento')
+    def ConsultarXpsEvento(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            xpEvento = jsonData
+        else:
+            xpEvento = request.POST.get('desafio', '')
+
+        if Evento.objects.get(id=xpEvento['id']):
+            evento = Evento.objects.get(id=xpEvento['id'])
+            if XpEvento.objects.filter(evento=evento):
+                xpEventoFinded = XpEvento.objects.filter(evento=evento).order_by('-xp_evento')
+                serializer = XpEventoSerializer(xpEventoFinded, many=True)
+
+                return Response({'List': serializer.data})
+            else:
+                return Response({'XPevento não existe'})
+        else:
+            return Response({'Evento não existe.'})
 
 
 

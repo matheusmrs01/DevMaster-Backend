@@ -18,7 +18,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 
-from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet
+from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet, XpeventoViewSet
 from jogador.views import JogadorItemViewSet
 from missao.api.viewsets import CriarMissaoViewSet, MissaoViewSet
 from evento.views import ItemViewSet, EventoViewSet
@@ -27,6 +27,7 @@ from burndown.views import BurndownViewSet, MissaoBurndownViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'jogador', JogadorViewSet)
+router.register(r'jogadorxpevento', XpeventoViewSet, base_name='jogadorxpevento')
 router.register(r'jogadoritens', JogadorItemViewSet, base_name='jogadoritens')
 router.register(r'criarjogador', JogadorCreateViewSet)
 router.register(r'criarmissao', CriarMissaoViewSet)
