@@ -237,6 +237,117 @@ class DesafioViewSet(GenericViewSet):
                              "message": "Esse desafio não pertence a você."},
                             status=400)
 
+    @method_decorator(csrf_exempt)
+    @action(methods=['PUT'], detail=False, url_path='mudarStatus')
+    def MudarStatus(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
+
+            desafio = jsonData
+        else:
+            desafio = request.POST.get('desafio', '')
+
+        if Desafio.objects.get(pk=desafio['id']):
+            desafioFinded = Desafio.objects.get(pk=desafio['id'])
+            if desafio['status'] == 'E':
+                if desafioFinded.status == 'A':
+                    desafioFinded.status = 'E'
+                    desafioFinded.save()
+
+                    serializer = DesafioSerializer(desafioFinded)
+                    return Response({'Desafio': serializer.data}, status=200)
+                else:
+                    return Response({"error": True, "message": "Desafio não esta em fase de aposta."}, status=400)
+
+            elif desafio['status'] == 'C':
+                if desafioFinded.status == 'E':
+                    missoesdesafioFinded = DesafioMissoes.objects.filter(desafio=desafioFinded)
+
+                    aux_desafiante = 0
+                    aux_desafiado = 0
+
+                    for mFinded in missoesdesafioFinded:
+                        if mFinded.desafio.desafiante == mFinded.missao.jogador:
+                            aux_desafiante = aux_desafiante + mFinded.xp_ganha
+
+                        if mFinded.desafio.desafiado == mFinded.missao.jogador:
+                            aux_desafiado = aux_desafiado + mFinded.xp_ganha
+
+                    if aux_desafiante > aux_desafiado:
+                        desafioFinded.vencedor = 'DE'
+
+                        jogadorVencedor = Jogador.objects.get(pk=desafioFinded.desafiante.id)
+                        jogadorVencedor.desafios_v = jogadorVencedor.desafios_v + 1
+                        jogadorVencedor.save()
+
+                        if JogadorItem.objects.filter(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiado.item):
+                            jogadorItem_Desafiante = JogadorItem.objects.get(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiado.item)
+                            jogadorItem_Desafiante.quantidade = jogadorItem_Desafiante.quantidade + 1
+                            if jogadorItem_Desafiante == desafioFinded.item_desafiado:
+                                jogadorItem_Desafiante.quantidade_bloqueada = jogadorItem_Desafiante.quantidade_bloqueada - 1
+
+                            jogadorItem_Desafiante.save()
+
+                        else:
+                            newJogadorItem_desafiante = JogadorItem()
+                            newJogadorItem_desafiante.item = desafioFinded.item_desafiado.item
+                            newJogadorItem_desafiante.jogador = desafioFinded.desafiante
+                            newJogadorItem_desafiante.quantidade = 1
+                            newJogadorItem_desafiante.quantidade_bloqueada = 0
+                            newJogadorItem_desafiante.save()
+
+                        jogadorItem_Desafiante_2 = JogadorItem.objects.get(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiante.item)
+                        jogadorItem_Desafiante_2.quantidade_bloqueada = jogadorItem_Desafiante_2.quantidade_bloqueada - 1
+                        jogadorItem_Desafiante_2.save()
+
+                        jogadorItem_Desafiado = JogadorItem.objects.get(jogador=desafioFinded.desafiado,item=desafioFinded.item_desafiado.item)
+                        jogadorItem_Desafiado.quantidade = jogadorItem_Desafiado.quantidade - 1
+                        jogadorItem_Desafiado.quantidade_bloqueada = jogadorItem_Desafiado.quantidade_bloqueada - 1
+                        jogadorItem_Desafiado.save()
+
+                    else:
+                        desafioFinded.vencedor = 'DO'
+
+                        jogadorVencedor = Jogador.objects.get(pk=desafioFinded.desafiado.id)
+                        jogadorVencedor.desafios_v = jogadorVencedor.desafios_v + 1
+                        jogadorVencedor.save()
+
+                        if JogadorItem.objects.filter(jogador=desafioFinded.desafiado,item=desafioFinded.item_desafiante.item):
+                            jogadorItem_Desafiado = JogadorItem.objects.get(jogador=desafioFinded.desafiado,item=desafioFinded.item_desafiante.item)
+                            jogadorItem_Desafiado.quantidade = jogadorItem_Desafiado.quantidade + 1
+
+                            if jogadorItem_Desafiado == desafioFinded.item_desafiante:
+                                jogadorItem_Desafiado.quantidade_bloqueada = jogadorItem_Desafiado.quantidade_bloqueada - 1
+
+                            jogadorItem_Desafiado.save()
+
+                        else:
+                            newJogadorItem_desafiado = JogadorItem()
+                            newJogadorItem_desafiado.item = desafioFinded.item_desafiante.item
+                            newJogadorItem_desafiado.jogador = desafioFinded.desafiado
+                            newJogadorItem_desafiado.quantidade = 1
+                            newJogadorItem_desafiado.quantidade_bloqueada = 0
+                            newJogadorItem_desafiado.save()
+
+                        jogadorItem_Desafiado_2 = JogadorItem.objects.get(jogador=desafioFinded.desafiado,item=desafioFinded.item_desafiado.item)
+                        jogadorItem_Desafiado_2.quantidade_bloqueada = jogadorItem_Desafiado_2.quantidade_bloqueada - 1
+                        jogadorItem_Desafiado_2.save()
+
+                        jogadorItem_Desafiante = JogadorItem.objects.get(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiante.item)
+                        jogadorItem_Desafiante.quantidade = jogadorItem_Desafiante.quantidade - 1
+                        jogadorItem_Desafiante.quantidade_bloqueada = jogadorItem_Desafiante.quantidade_bloqueada - 1
+                        jogadorItem_Desafiante.save()
+
+                    desafioFinded.status = 'C'
+                    desafioFinded.save()
+
+                    serializer = DesafioSerializer(desafioFinded)
+                    return Response({'Desafio': serializer.data}, status=200)
+                else:
+                    return Response({"error": True, "message": "Desafio não esta em fase de andamento."}, status=400)
+        else:
+            return Response({"error": True, "message": "Desafio não existe."}, status=400)
+
 
 class DesafioMissaoViewSet(GenericViewSet):
     queryset = DesafioMissoes.objects.all()
