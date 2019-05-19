@@ -2,10 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
+from evento.models import Item, Evento
+
 class Jogador(models.Model):
     """Essa classe se destina para o cadastro de Jogador"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Jogador', blank = True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='User', blank = True)
+    tipo = models.CharField(verbose_name='Tipo', max_length=1, default='J', blank=True)
     xp_total = models.FloatField(default=0, blank=True)
+    desafios_v = models.IntegerField(default=0, blank=True)
     m_realizadas = models.IntegerField(default=0, blank=True)
     m_adquiridas = models.IntegerField(default=0, blank=True)
     mr_nadata = models.IntegerField(default=0, blank=True)
@@ -15,15 +19,19 @@ class Jogador(models.Model):
     def __str__(self):
         return 'Jogador: %s' % (self.user.get_full_name())
 
-class Missao(models.Model):
-    jogador = models.ForeignKey(Jogador, on_delete=models.CASCADE, related_name='Jogador')
-    nome_missao = models.CharField(blank=False, max_length=200)
-    xp_missao = models.FloatField(blank=False)
-    data = models.CharField(max_length=100, default='', blank=True)
-    nice_tempo = models.BooleanField(default=False, blank=False)
-    status = models.BooleanField(default=False, blank=False)
-    id_issue = models.IntegerField(default=0, blank=False)
-    id_projeto = models.IntegerField(default=0, blank=False)
+class JogadorItem(models.Model):
+    jogador = models.ForeignKey(Jogador, on_delete=models.CASCADE, related_name='JogadorItem')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='itemJogador')
+    quantidade = models.IntegerField(default=0)
+    quantidade_bloqueada = models.IntegerField(default=0)
 
     def __str__(self):
-        return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Missão: ' + self.nome_missao
+        return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Item: ' + self.item.name
+
+class XpEvento(models.Model):
+    evento = models.ForeignKey(Evento, on_delete=models.PROTECT, related_name='Evento')
+    jogador = models.ForeignKey(Jogador, blank=True, on_delete=models.CASCADE, related_name='JogadorEventoXP')
+    xp_evento = models.FloatField(default=0, blank=True)
+
+    def __str__(self):
+        return 'Evento: ' + self.evento.name + ' - Jogador: ' + self.jogador.user.get_full_name()

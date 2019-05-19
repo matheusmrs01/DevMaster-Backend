@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins, generics, permissions
@@ -8,10 +7,19 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.conf import settings
 
-from jogador.models import Jogador, Missao
+import json
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+
+from jogador.models import Jogador, XpEvento, JogadorItem
 from django.contrib.auth.models import User
-from .serializers import JogadorSerializer, UserSerializer, MissaoSerializer, CriarJogadorSerializer, \
-    CriarMissaoSerializer
+from .serializers import JogadorSerializer, UserSerializer, CriarJogadorSerializer, XpEventoSerializer
+
+from evento.models import Evento
 
 
 class JogadorCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -59,34 +67,32 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class CriarMissaoViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    queryset = Missao.objects.all()
-    serializer_class = CriarMissaoSerializer
+class XpeventoViewSet(GenericViewSet):
+    queryset = XpEvento.objects.all()
+    serializer_class = XpEventoSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='consultarXpsEvento')
+    def ConsultarXpsEvento(self, request):
+        if (request.META['CONTENT_TYPE'] == 'application/json'):
+            jsonData = json.loads(request.body)
 
-class MissaoViewSet(mixins.ListModelMixin,
-                    mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    viewsets.GenericViewSet):
-    queryset = Missao.objects.all()
-    serializer_class = MissaoSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def retrieve(self, request, pk, *args, **kwargs):
-        missão = Missao.objects.get(id=pk)
-        if request.user == missão.jogador.user or request.user.is_superadmin:
-            serializer = MissaoSerializer(missão)
-            return Response(serializer.data)
+            xpEvento = jsonData
         else:
-            return Response({'Você não é o dono da missão!'})
+            xpEvento = request.POST.get('desafio', '')
 
-    def update(self, request, pk, *args, **kwargs):
-        missao = Missao.objects.get(id=pk)
-        if missao.jogador.user == request.user or request.user.is_superadmin:
-            return super(MissaoViewSet, self).update(request, *args, **kwargs)
+        if Evento.objects.get(id=xpEvento['id']):
+            evento = Evento.objects.get(id=xpEvento['id'])
+            if XpEvento.objects.filter(evento=evento):
+                xpEventoFinded = XpEvento.objects.filter(evento=evento).order_by('-xp_evento')
+                serializer = XpEventoSerializer(xpEventoFinded, many=True)
+
+                return Response({'List': serializer.data})
+            else:
+                return Response({'XPevento não existe'})
         else:
-            return Response({'Você não é dono desta missão!'})
+            return Response({'Evento não existe.'})
+
 
 
