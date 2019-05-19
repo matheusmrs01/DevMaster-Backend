@@ -16,6 +16,7 @@ class Desafio(models.Model):
     VENCEDOR_CHOICES = (
         ('DE', 'Desafiante'),
         ('DO', 'Desafiado'),
+        ('EM', 'Empate'),
     )
 
     nome = models.CharField(max_length=200, verbose_name='Nome Desafio', blank=False)
