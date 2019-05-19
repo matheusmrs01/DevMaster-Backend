@@ -22,10 +22,10 @@ from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet
 from jogador.views import JogadorItemViewSet
 from missao.api.viewsets import CriarMissaoViewSet, MissaoViewSet
 from evento.views import ItemViewSet, EventoViewSet
-from desafio.views import DesafioViewSet
+from desafio.views import DesafioViewSet,DesafioMissaoViewSet
 from burndown.views import BurndownViewSet, MissaoBurndownViewSet
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'jogador', JogadorViewSet)
 router.register(r'jogadoritens', JogadorItemViewSet, base_name='jogadoritens')
 router.register(r'criarjogador', JogadorCreateViewSet)
@@ -34,6 +34,7 @@ router.register(r'missao', MissaoViewSet)
 router.register(r'item', ItemViewSet, base_name='item')
 router.register(r'evento', EventoViewSet, base_name='evento')
 router.register(r'desafio', DesafioViewSet, base_name='desafio')
+router.register(r'missaodesafio', DesafioMissaoViewSet, base_name='missaodesafio')
 router.register(r'burndown', BurndownViewSet, base_name='burndown')
 router.register(r'missaoburndown', MissaoBurndownViewSet, base_name='missaoburndown')
 

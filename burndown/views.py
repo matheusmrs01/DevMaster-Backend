@@ -39,8 +39,6 @@ class BurndownViewSet(GenericViewSet):
                 if missaoBurndown.missao.status:
                     auxMF = auxMF + 1
 
-            print('Missões: ' + str(auxM))
-            print('Missoes Finalizadas: '+ str(auxMF))
             burndownFinded.quantidade_missao = auxM
             burndownFinded.quantidade_queimada = auxMF
             burndownFinded.save()
