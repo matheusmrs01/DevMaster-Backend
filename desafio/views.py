@@ -305,7 +305,7 @@ class DesafioViewSet(GenericViewSet):
                         jogadorItem_Desafiado.quantidade_bloqueada = jogadorItem_Desafiado.quantidade_bloqueada - 1
                         jogadorItem_Desafiado.save()
 
-                    else:
+                    elif aux_desafiante < aux_desafiado:
                         desafioFinded.vencedor = 'DO'
 
                         jogadorVencedor = Jogador.objects.get(pk=desafioFinded.desafiado.id)
@@ -335,6 +335,16 @@ class DesafioViewSet(GenericViewSet):
 
                         jogadorItem_Desafiante = JogadorItem.objects.get(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiante.item)
                         jogadorItem_Desafiante.quantidade = jogadorItem_Desafiante.quantidade - 1
+                        jogadorItem_Desafiante.quantidade_bloqueada = jogadorItem_Desafiante.quantidade_bloqueada - 1
+                        jogadorItem_Desafiante.save()
+
+                    else:
+                        desafioFinded.vencedor = 'EM'
+                        jogadorItem_Desafiado = JogadorItem.objects.get(jogador=desafioFinded.desafiado,item=desafioFinded.item_desafiado.item)
+                        jogadorItem_Desafiado.quantidade_bloqueada = jogadorItem_Desafiado.quantidade_bloqueada - 1
+                        jogadorItem_Desafiado.save()
+
+                        jogadorItem_Desafiante = JogadorItem.objects.get(jogador=desafioFinded.desafiante,item=desafioFinded.item_desafiante.item)
                         jogadorItem_Desafiante.quantidade_bloqueada = jogadorItem_Desafiante.quantidade_bloqueada - 1
                         jogadorItem_Desafiante.save()
 
