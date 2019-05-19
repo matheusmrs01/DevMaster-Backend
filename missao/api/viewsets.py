@@ -16,6 +16,8 @@ from django.contrib.auth.models import User
 
 from evento.models import Evento
 
+from desafio.models import DesafioMissoes
+
 from .serializers import MissaoSerializer, CriarMissaoSerializer
 
 class CriarMissaoViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -77,6 +79,14 @@ class MissaoViewSet(mixins.ListModelMixin,
 
             else:
                 aux_xp = aux_xp + missaoFinded.xp_missao
+
+            if DesafioMissoes.objects.filter(missao=missaoFinded):
+                desafioMissoesFinded = DesafioMissoes.objects.filter(missao=missaoFinded)
+
+                for desafiomissaoFinded in desafioMissoesFinded:
+                    auxDeMi = DesafioMissoes.objects.get(id=desafiomissaoFinded.id)
+                    auxDeMi.xp_ganha = aux_xp
+                    auxDeMi.save()
 
             missaoFinded.xp_ganha = aux_xp
             missaoFinded.save()
