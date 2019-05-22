@@ -16,7 +16,7 @@ class Missao(models.Model):
     def __str__(self):
         return 'Jogador: ' + self.jogador.user.get_full_name() + ' - Missão: ' + self.nome_missao
 
-#Trocar MissãoGrupo por Grupo. Com os campos: nome, xp_grupo e status
+#Trocar MissãoGrupo por Grupo. Com os campos: nome, xp_grupo, status e participantes (string)
 #logica: Se a issue tiver uma milestone, é criado um grupo
 #   Missão deve ter uma referencia de grupo
 #   quando for para o front, agrupar as missões pelo grupo.
