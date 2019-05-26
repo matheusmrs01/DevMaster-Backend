@@ -15,6 +15,7 @@ from rest_framework.renderers import JSONRenderer
 from evento.serializers import EventoSerializer, ItemSerializer
 from evento.models import Evento, Item
 from jogador.models import XpEvento, JogadorItem
+from jogador.api.serializers import XpEventoSerializer
 
 from django.contrib.auth.models import User
 from jogador.models import Jogador
@@ -168,31 +169,31 @@ class EventoViewSet(GenericViewSet):
 
 
     @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='consultarEvento')
-    def consultarEvento(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
-
-            evento = jsonData
-        else:
-            evento = request.POST.get('item')
-
-        eventoFidend = Evento.objects.get(pk=evento['id'])
+    @action(methods=['GET'], detail=False, url_path='consultarEvento/(?P<pk>[0-9]+)$')
+    def consultarEvento(self, request, pk=None):
+        eventoFidend = Evento.objects.get(pk=pk)
         serializer = EventoSerializer(eventoFidend)
-        return Response({'Evento: ': serializer.data})
-
+        return Response({'Evento': serializer.data})
 
     @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='gerarPremiacao')
-    def GerarPremiacao(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
+    @action(methods=['GET'], detail=False, url_path='PremiacaoEvento/(?P<pk>[0-9]+)$')
+    def premiacaoEvento(self, request, pk=None):
+        eventoFidend = Evento.objects.get(pk=pk)
 
-            evento = jsonData
+        if eventoFidend.is_finalized:
+            eventoXP = XpEvento.objects.filter(evento=eventoFidend).order_by('-xp_evento')
+            if eventoXP:
+                serializer = XpEventoSerializer(eventoXP, many=True)
+                return Response({'Premiacao': serializer.data})
+            else:
+                return Response({'Esse Evento não teve premiação.'})
         else:
-            evento = request.POST.get('item')
+            return Response({'Esse Evento ainda esta ativo.'})
 
-        eventoFidend = Evento.objects.get(pk=evento['id'])
+    @method_decorator(csrf_exempt)
+    @action(methods=['GET'], detail=False, url_path='gerarPremiacao/(?P<pk>[0-9]+)$')
+    def GerarPremiacao(self, request, pk=None):
+        eventoFidend = Evento.objects.get(pk=pk)
 
         eventoXP = XpEvento.objects.filter(evento=eventoFidend).order_by('-xp_evento')
         if not eventoFidend.is_active:
