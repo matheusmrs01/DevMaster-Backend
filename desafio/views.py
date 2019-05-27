@@ -37,6 +37,7 @@ class DesafioViewSet(GenericViewSet):
                 return Response({"error": True, "message": "Esse nome de desafio já está em uso."},status=400)
             else:
                 if desafio['is_item']:
+                    print(desafio)
                     jogador_item = JogadorItem.objects.get(pk=int(desafio['item_desafiante']))
 
                     if jogador_item.quantidade_bloqueada == jogador_item.quantidade:
@@ -162,6 +163,7 @@ class DesafioViewSet(GenericViewSet):
                                         jogador_item_old.save()
 
                                         desafioFinded.item_desafiado = jogador_item
+                                        desafioFinded.status = 'A'
                                         desafioFinded.save()
 
                                         serializer = DesafioSerializer(desafioFinded)
@@ -465,17 +467,10 @@ class DesafioMissaoViewSet(GenericViewSet):
 
 
     @method_decorator(csrf_exempt)
-    @action(methods=['DELETE'], detail=False, url_path='deleteMissoesDesafio')
-    def DeleteMissoesDesafio(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
-
-            desafio = jsonData
-        else:
-            desafio = request.POST.get('desafio', '')
-
+    @action(methods=['DELETE'], detail=False, url_path='deleteMissoesDesafio/(?P<pk>[0-9]+)$')
+    def DeleteMissoesDesafio(self, request, pk=None):
         try:
-            desafioMissaoFinded = DesafioMissoes.objects.get(pk=desafio['id'])
+            desafioMissaoFinded = DesafioMissoes.objects.get(pk=pk)
 
             if Jogador.objects.get(user=request.user) == desafioMissaoFinded.missao.jogador:
                 desafioMissaoFinded.delete()
@@ -488,17 +483,10 @@ class DesafioMissaoViewSet(GenericViewSet):
 
 
     @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='consultarMissoesDesafio')
-    def ConsultarMissoesDesafio(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
-
-            desafio = jsonData
-        else:
-            desafio = request.POST.get('desafio', '')
-
+    @action(methods=['GET'], detail=False, url_path='consultarMissoesDesafio/(?P<pk>[0-9]+)$')
+    def ConsultarMissoesDesafio(self, request, pk=None):
         try:
-            desafioFinded = Desafio.objects.get(pk=desafio['id'])
+            desafioFinded = Desafio.objects.get(pk=pk)
             missoesDesafioFinded = DesafioMissoes.objects.filter(desafio=desafioFinded)
 
             serializer = DesafioMissoesSerializer(missoesDesafioFinded, many=True)
