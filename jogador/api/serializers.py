@@ -103,7 +103,7 @@ class JogadorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jogador
-        fields = ('id', 'user', 'private_token', 'xp_total', 'm_realizadas', 'm_adquiridas', 'mr_nadata', 'url_imagem', 'desafios_v', 'eventos_v')
+        fields = ('id', 'user', 'private_token', 'xp_total', 'm_realizadas', 'm_adquiridas', 'mr_nadata', 'url_imagem', 'desafios_v', 'eventos_v', 'tipo')
 
 
 class JogadorItemSerializer(serializers.ModelSerializer):
