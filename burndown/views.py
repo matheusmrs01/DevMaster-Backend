@@ -51,23 +51,17 @@ class BurndownViewSet(GenericViewSet):
     @method_decorator(csrf_exempt)
     @action(methods=['GET'], detail=False, url_path='ListarBurndown')
     def listarBurndown(self, request):
-        burndowns = Burndown.objects.all()
+        burndowns = Burndown.objects.all().order_by('-data_inicio')
         serializer = BurndownSerializer(burndowns, many=True)
 
         return Response({'List': serializer.data})
 
 
     @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='ConsultarBurndown')
-    def consultarBurndown(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
+    @action(methods=['GET'], detail=False, url_path='ConsultarBurndown/(?P<pk>[0-9]+)$')
+    def consultarBurndown(self, request, pk=None):
 
-            burndown = jsonData
-        else:
-            burndown = request.POST.get('burndown', '')
-
-        burndownFinded = Burndown.objects.get(pk=burndown['id'])
+        burndownFinded = Burndown.objects.get(pk=pk)
         serializer = BurndownSerializer(burndownFinded)
 
         return Response({'Burndown': serializer.data})
