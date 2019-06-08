@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import permissions
 
-from burndown.serializers import BurndownSerializer, MissaoBurndownSerializer
-from .models import Burndown, MissaoBurndown
+from burndown.serializers import BurndownSerializer
+from .models import Burndown
 
 
 class BurndownViewSet(GenericViewSet):
@@ -18,34 +18,34 @@ class BurndownViewSet(GenericViewSet):
     serializer_class = BurndownSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='AtualizarBurndown')
-    def atualizarBurndown(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
+    # @method_decorator(csrf_exempt)
+    # @action(methods=['GET'], detail=False, url_path='AtualizarBurndown')
+    # def atualizarBurndown(self, request):
+    #     if (request.META['CONTENT_TYPE'] == 'application/json'):
+    #         jsonData = json.loads(request.body)
 
-            burndown = jsonData
-        else:
-            burndown = request.POST.get('burndown', '')
+    #         burndown = jsonData
+    #     else:
+    #         burndown = request.POST.get('burndown', '')
 
-        burndownFinded = Burndown.objects.get(pk=burndown['id'])
-        missoesBurndown = MissaoBurndown.objects.filter(burndown=burndownFinded)
+    #     burndownFinded = Burndown.objects.get(pk=burndown['id'])
+    #     missoesBurndown = MissaoBurndown.objects.filter(burndown=burndownFinded)
 
-        if missoesBurndown:
-            auxM = 0
-            auxMF = 0
-            for missaoBurndown in missoesBurndown:
-                auxM = auxM + 1
-                if missaoBurndown.missao.status:
-                    auxMF = auxMF + 1
+    #     if missoesBurndown:
+    #         auxM = 0
+    #         auxMF = 0
+    #         for missaoBurndown in missoesBurndown:
+    #             auxM = auxM + 1
+    #             if missaoBurndown.missao.status:
+    #                 auxMF = auxMF + 1
 
-            burndownFinded.quantidade_missao = auxM
-            burndownFinded.quantidade_queimada = auxMF
-            burndownFinded.save()
+    #         burndownFinded.quantidade_missao = auxM
+    #         burndownFinded.quantidade_queimada = auxMF
+    #         burndownFinded.save()
 
-            return Response({"message": "Burndown Atualizado."})
-        else:
-            return Response({"message": "Esse Burndown não tem missões."})
+    #         return Response({"message": "Burndown Atualizado."})
+    #     else:
+    #         return Response({"message": "Esse Burndown não tem missões."})
 
 
     @method_decorator(csrf_exempt)
@@ -66,30 +66,30 @@ class BurndownViewSet(GenericViewSet):
 
         return Response({'Burndown': serializer.data})
 
-class MissaoBurndownViewSet(GenericViewSet):
-    queryset = MissaoBurndown.objects.all()
-    serializer_class = MissaoBurndownSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+# class MissaoBurndownViewSet(GenericViewSet):
+#     queryset = MissaoBurndown.objects.all()
+#     serializer_class = MissaoBurndownSerializer
+#     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='ListarMissaoBurndown')
-    def listarMissãoBurndown(self, request):
-        missaoburndowns = MissaoBurndown.objects.all()
-        serializer = MissaoBurndownSerializer(missaoburndowns, many=True)
+#     @method_decorator(csrf_exempt)
+#     @action(methods=['GET'], detail=False, url_path='ListarMissaoBurndown')
+#     def listarMissãoBurndown(self, request):
+#         missaoburndowns = MissaoBurndown.objects.all()
+#         serializer = MissaoBurndownSerializer(missaoburndowns, many=True)
 
-        return Response({'List': serializer.data})
+#         return Response({'List': serializer.data})
 
-    @method_decorator(csrf_exempt)
-    @action(methods=['GET'], detail=False, url_path='ConsultarMissaoBurndown')
-    def consultarMissaoBurndown(self, request):
-        if (request.META['CONTENT_TYPE'] == 'application/json'):
-            jsonData = json.loads(request.body)
+#     @method_decorator(csrf_exempt)
+#     @action(methods=['GET'], detail=False, url_path='ConsultarMissaoBurndown')
+#     def consultarMissaoBurndown(self, request):
+#         if (request.META['CONTENT_TYPE'] == 'application/json'):
+#             jsonData = json.loads(request.body)
 
-            burndown = jsonData
-        else:
-            burndown = request.POST.get('burndown', '')
+#             burndown = jsonData
+#         else:
+#             burndown = request.POST.get('burndown', '')
 
-        missaoburndownFinded = MissaoBurndown.objects.get(pk=burndown['id'])
-        serializer = MissaoBurndownSerializer(missaoburndownFinded)
+#         missaoburndownFinded = MissaoBurndown.objects.get(pk=burndown['id'])
+#         serializer = MissaoBurndownSerializer(missaoburndownFinded)
 
-        return Response({'MissaoBurndown': serializer.data})
+#         return Response({'MissaoBurndown': serializer.data})
