@@ -203,6 +203,8 @@ class EventoViewSet(GenericViewSet):
                     for jogadorXP in eventoXP:
                         jogadorFinded = Jogador.objects.get(id=jogadorXP.jogador.id)
                         if aux == 1:
+                            jogadorFinded.eventos_v = jogadorFinded.eventos_v + 1
+                            jogadorFinded.save()
                             if eventoFidend.primeiro:
                                 jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.primeiro)
 
@@ -219,81 +221,76 @@ class EventoViewSet(GenericViewSet):
                                     newJogadorItem.save()
                         elif aux == 2:
                             if eventoFidend.segundo:
-                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.segundo)
-
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.segundo)
+                                print(jogadorItem)
                                 if jogadorItem:
-                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
-                                                                                item=eventoFidend.segundo)
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.segundo)
                                     jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
                                     jogadorItemFinded.save()
                                 else:
                                     newJogadorItem = JogadorItem()
                                     newJogadorItem.jogador = jogadorFinded
-                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.item = eventoFidend.segundo
                                     newJogadorItem.quantidade = 1
                                     newJogadorItem.quantidade_bloqueada = 0
                                     newJogadorItem.save()
                         elif aux == 3:
                             if eventoFidend.terceiro:
-                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.terceiro)
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.terceiro)
 
                                 if jogadorItem:
-                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
-                                                                                item=eventoFidend.terceiro)
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.terceiro)
                                     jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
                                     jogadorItemFinded.save()
                                 else:
                                     newJogadorItem = JogadorItem()
                                     newJogadorItem.jogador = jogadorFinded
-                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.item = eventoFidend.terceiro
                                     newJogadorItem.quantidade = 1
                                     newJogadorItem.quantidade_bloqueada = 0
                                     newJogadorItem.save()
                         elif aux == 4:
                             if eventoFidend.quarto:
-                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.quarto)
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.quarto)
 
                                 if jogadorItem:
-                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
-                                                                                item=eventoFidend.quarto)
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.quarto)
                                     jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
                                     jogadorItemFinded.save()
                                 else:
                                     newJogadorItem = JogadorItem()
                                     newJogadorItem.jogador = jogadorFinded
-                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.item = eventoFidend.quarto
                                     newJogadorItem.quantidade = 1
                                     newJogadorItem.quantidade_bloqueada = 0
                                     newJogadorItem.save()
                         elif aux == 5:
                             if eventoFidend.quinto:
-                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.quinto)
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.quinto)
 
                                 if jogadorItem:
-                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
-                                                                                item=eventoFidend.quinto)
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.quinto)
                                     jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
                                     jogadorItemFinded.save()
                                 else:
                                     newJogadorItem = JogadorItem()
                                     newJogadorItem.jogador = jogadorFinded
-                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.item = eventoFidend.quinto
                                     newJogadorItem.quantidade = 1
                                     newJogadorItem.quantidade_bloqueada = 0
                                     newJogadorItem.save()
                         elif aux == 6:
                             if eventoFidend.sexto:
-                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded, item=eventoFidend.sexto)
+                                jogadorItem = JogadorItem.objects.filter(jogador=jogadorFinded,item=eventoFidend.sexto)
 
                                 if jogadorItem:
-                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,
-                                                                                item=eventoFidend.sexto)
+                                    jogadorItemFinded = JogadorItem.objects.get(jogador=jogadorFinded,item=eventoFidend.sexto)
                                     jogadorItemFinded.quantidade = jogadorItemFinded.quantidade + 1
                                     jogadorItemFinded.save()
                                 else:
                                     newJogadorItem = JogadorItem()
                                     newJogadorItem.jogador = jogadorFinded
-                                    newJogadorItem.item = eventoFidend.primeiro
+                                    newJogadorItem.item = eventoFidend.sexto
                                     newJogadorItem.quantidade = 1
                                     newJogadorItem.quantidade_bloqueada = 0
                                     newJogadorItem.save()
