@@ -40,12 +40,12 @@ class IssueGitlabViewSet(GenericViewSet):
         print(issue)
         if gitlab_token == '8ae957d6f68f46055091ff319fa67b888e122a3a':
             if issue['object_kind'] == 'issue':
-                userFinded = User.objects.filter(username=issue['assignee']['username'])
+                userFinded = User.objects.filter(username=issue['assignees'][0]['username'])
                 if userFinded:
-                    jogadorFinded = Jogador.objects.filter(user=User.objects.get(username=issue['assignee']['username']))
+                    jogadorFinded = Jogador.objects.filter(user=User.objects.get(username=issue['assignees'][0]['username']))
                     #Função usada para criar uma missão
                     if jogadorFinded:
-                        jogadorFinded = Jogador.objects.get(user=User.objects.get(username=issue['assignee']['username']))
+                        jogadorFinded = Jogador.objects.get(user=User.objects.get(username=issue['assignees'][0]['username']))
                         if issue['object_attributes']['action'] == 'open' and issue['object_attributes']['state'] == 'opened':
                             newMissao = Missao()
                             newMissao.jogador = jogadorFinded
