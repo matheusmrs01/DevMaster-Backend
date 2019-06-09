@@ -145,12 +145,15 @@ class IssueGitlabViewSet(GenericViewSet):
                                     return Response({'Missão nunca foi cadastrada na base de dados.'})
                         
                             #reabre a issue
-                            elif issue['object_attributes']['action'] == 'reopen':
-                                missaoFinded = Missao.objects.get(id_issue=issue['object_attributes']['id'])
-                                missaoFinded.status = False
-                                missaoFinded.xp_ganha = 0
-                                missoeFinded.save()
-                                return Response({'Missão reaberta com sucesso!'})
+                            # elif issue['object_attributes']['action'] == 'reopen':
+                            #     if Missao.objects.filter(id_issue=issue['object_attributes']['id']):
+                            #         missaoFinded = Missao.objects.get(id_issue=issue['object_attributes']['id'])
+                            #         missaoFinded.status = False
+                            #         missaoFinded.xp_ganha = 0
+                            #         missoeFinded.save()
+                            #         return Response({'Missão reaberta com sucesso!'})
+                            #     else:
+                            #         return Response({'Missão não existe '})
                             else:
                                 return Response({'Issue não é de um timpo tratavel pelo endpoint.'})
                         else:
