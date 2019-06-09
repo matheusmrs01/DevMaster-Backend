@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
 
 from jogador.api.viewsets import JogadorViewSet, JogadorCreateViewSet, XpeventoViewSet
 from jogador.views import JogadorItemViewSet
@@ -56,4 +58,4 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include('rest_auth.urls')),
     path('admin/', admin.site.urls),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
