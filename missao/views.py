@@ -47,7 +47,7 @@ class IssueGitlabViewSet(GenericViewSet):
                         #Função usada para criar uma missão
                         if jogadorFinded:
                             jogadorFinded = Jogador.objects.get(user=User.objects.get(username=issue['assignees'][0]['username']))
-                            if issue['object_attributes']['action'] == 'open' and issue['object_attributes']['state'] == 'opened':
+                            if issue['object_attributes']['action'] == 'open':
                                 newMissao = Missao()
                                 newMissao.jogador = jogadorFinded
                                 newMissao.nome_missao = issue['object_attributes']['title']
@@ -76,7 +76,7 @@ class IssueGitlabViewSet(GenericViewSet):
                                 return Response({'Missão cadastrada com sucesso!'})
                             
                             #finaliza a missão ja criada
-                            if issue['object_attributes']['state'] == 'closed':
+                            elif issue['object_attributes']['action'] == 'close':
                                 missaoFinded = Missao.objects.filter(id_issue=issue['object_attributes']['id'])
                                 if(missaoFinded):
                                     missaoFinded = Missao.objects.get(id_issue=issue['object_attributes']['id'])
@@ -143,6 +143,16 @@ class IssueGitlabViewSet(GenericViewSet):
                                         return Response({'Missão já foi fechada.'})
                                 else:
                                     return Response({'Missão nunca foi cadastrada na base de dados.'})
+                        
+                            #reabre a issue
+                            elif issue['object_attributes']['action'] == 'reopen':
+                                missaoFinded = Missao.objects.get(id_issue=issue['object_attributes']['id'])
+                                missaoFinded.status = False
+                                missaoFinded.xp_ganha = 0
+                                missoeFinded.save()
+                                return Response({'Missão reaberta com sucesso!'})
+                            else:
+                                return Response({'Issue não é de um timpo tratavel pelo endpoint.'})
                         else:
                             return Response({'Jogador dessa Issue não existe.'})
                     else:
