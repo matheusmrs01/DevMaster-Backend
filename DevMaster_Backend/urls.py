@@ -50,7 +50,7 @@ router.register(r'', IssueGitlabViewSet, base_name='gitlabissue')
 router.register(r'burndown', BurndownViewSet, base_name='burndown')
 
 # router.register(r'missaoburndown', MissaoBurndownViewSet, base_name='missaoburndown')
-
+ 
 
 urlpatterns = [
     path('', include(router.urls)),
