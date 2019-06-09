@@ -36,8 +36,7 @@ class IssueGitlabViewSet(GenericViewSet):
             issue = jsonData
         else:
             issue = request.POST.get('issue', '')
-        print('ANTES DO PRINT DA ISSUE')
-        print(issue)
+            
         if gitlab_token == '8ae957d6f68f46055091ff319fa67b888e122a3a':
             if issue['object_kind'] == 'issue':
                 if issue['assignees']:
