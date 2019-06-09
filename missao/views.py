@@ -84,6 +84,9 @@ class IssueGitlabViewSet(GenericViewSet):
                                     # issue = r.json()
                                     xpMissao = 80
 
+                                    missaoFinded.status = True
+                                    missaoFinded.nice_data = True
+                                    
                                     #verifica a data da missão e a data que vai ser finalizada
                                     if issue['object_attributes']['due_date']:
                                         missaoFinded.data = issue['object_attributes']['due_date']
@@ -122,8 +125,6 @@ class IssueGitlabViewSet(GenericViewSet):
                                                 newXpEvento.save()
 
                                     missaoFinded.xp_ganha = xpMissao
-                                    missaoFinded.status = True
-                                    missaoFinded.nice_data = True
 
                                     #missao desafio - salva o valor em cada missão do desafio
                                     missoesDesafio = DesafioMissoes.objects.filter(missao=missaoFinded)
