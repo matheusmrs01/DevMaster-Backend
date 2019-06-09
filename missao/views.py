@@ -89,6 +89,7 @@ class IssueGitlabViewSet(GenericViewSet):
                                         missaoFinded.data = issue['object_attributes']['due_date']
                                         if datetime.now() > datetime.strptime(issue['object_attributes']['due_date'].replace('-','/'), '%Y/%m/%d'):
                                             xpMissao = xpMissao - 20
+                                            missaoFinded.nice_data = False
                                         else:
                                             missaoFinded.nice_data = True
                                     
@@ -96,9 +97,11 @@ class IssueGitlabViewSet(GenericViewSet):
                                     if issue['object_attributes']['time_estimate']:
                                         if not issue['object_attributes']['total_time_spent']:
                                             xpMissao = xpMissao - 50
+                                            missaoFinded.nice_tempo = False
                                         else:
                                             if issue['object_attributes']['time_estimate'] < issue['object_attributes']['total_time_spent']:
                                                 xpMissao = xpMissao - 50
+                                                missaoFinded.nice_tempo = False
                                             else:
                                                 missaoFinded.nice_tempo = True
 
@@ -120,6 +123,7 @@ class IssueGitlabViewSet(GenericViewSet):
 
                                     missaoFinded.xp_ganha = xpMissao
                                     missaoFinded.status = True
+                                    missaoFinded.nice_data = True
 
                                     #missao desafio - salva o valor em cada missão do desafio
                                     missoesDesafio = DesafioMissoes.objects.filter(missao=missaoFinded)
