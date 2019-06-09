@@ -15,4 +15,5 @@ from whitenoise import WhiteNoise
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DevMaster_Backend.settings')
 
 application = get_wsgi_application()
-# application = WhiteNoise(application, root='')
+# application = WhiteNoise(application, root='/DevMaster_Backend/static')
+# application.add_files('/path/DevMaster_Backend/static')
