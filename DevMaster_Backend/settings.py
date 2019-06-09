@@ -90,7 +90,7 @@ CORS_ALLOW_HEADERS = (
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'X-Gitlab-Token',
+    'x-gitlab-token',
 )
 
 REST_FRAMEWORK = {
