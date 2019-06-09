@@ -37,6 +37,7 @@ class IssueGitlabViewSet(GenericViewSet):
         else:
             issue = request.POST.get('issue', '')
 
+        print(issue)
         if gitlab_token == '8ae957d6f68f46055091ff319fa67b888e122a3a':
             if issue['object_kind'] == 'issue':
                 userFinded = User.objects.filter(username=issue['assignee']['username'])
