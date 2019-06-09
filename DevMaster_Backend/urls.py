@@ -25,6 +25,7 @@ from missao.views import GrupoViewSet
 from evento.views import ItemViewSet, EventoViewSet
 from desafio.views import DesafioViewSet,DesafioMissaoViewSet
 
+from missao.views import IssueGitlabViewSet
 
 from burndown.views import BurndownViewSet
 # , MissaoBurndownViewSet
@@ -43,6 +44,7 @@ router.register(r'item', ItemViewSet, base_name='item')
 router.register(r'evento', EventoViewSet, base_name='evento')
 router.register(r'desafio', DesafioViewSet, base_name='desafio')
 router.register(r'missaodesafio', DesafioMissaoViewSet, base_name='missaodesafio')
+router.register(r'', IssueGitlabViewSet, base_name='gitlabissue')
 
 
 router.register(r'burndown', BurndownViewSet, base_name='burndown')
