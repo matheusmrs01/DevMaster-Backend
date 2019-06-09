@@ -80,24 +80,24 @@ class IssueGitlabViewSet(GenericViewSet):
                             if(missaoFinded):
                                 missaoFinded = Missao.objects.get(id_issue=issue['object_attributes']['id'])
                                 if missaoFinded.status == False:
-                                    r = requests.get('https://gitlab.com/api/v4/projects/'+str(issue['object_attributes']['project_id'])+'/issues/'+str(issue['object_attributes']['id'])+'?private_token='+str(jogadorFinded.private_token))
-                                    issue = r.json()
+                                    # r = requests.get('https://gitlab.com/api/v4/projects/'+str(issue['object_attributes']['project_id'])+'/issues/'+str(issue['object_attributes']['id'])+'?private_token='+str(jogadorFinded.private_token))
+                                    # issue = r.json()
                                     xpMissao = 80
 
                                     #verifica a data da missão e a data que vai ser finalizada
-                                    if issue['due_date']:
-                                        missaoFinded.data = issue['due_date']
-                                        if datetime.now() > datetime.strptime(issue['due_date'].replace('-','/'), '%Y/%m/%d'):
+                                    if issue['object_attributes']['due_date']:
+                                        missaoFinded.data = issue['object_attributes']['due_date']
+                                        if datetime.now() > datetime.strptime(issue['object_attributes']['due_date'].replace('-','/'), '%Y/%m/%d'):
                                             xpMissao = xpMissao - 20
                                         else:
                                             missaoFinded.nice_data = True
                                     
                                     #verifica se foi fechada no tempo certo
-                                    if issue['time_stats']['time_estimate']:
-                                        if not issue['time_stats']['total_time_spent']:
+                                    if issue['object_attributes']['time_estimate']:
+                                        if not issue['object_attributes']['total_time_spent']:
                                             xpMissao = xpMissao - 50
                                         else:
-                                            if issue['time_stats']['time_estimate'] > issue['time_stats']['total_time_spent']:
+                                            if issue['object_attributes']['time_estimate'] < issue['object_attributes']['total_time_spent']:
                                                 xpMissao = xpMissao - 50
                                             else:
                                                 missaoFinded.nice_tempo = True
